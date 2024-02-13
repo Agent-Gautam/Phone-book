@@ -7,7 +7,7 @@ class contact {
     string phone;
     string name;
     string email;
-    bool fav;
+    bool fav;  //⭐
     contact(){
         count++;
         phone = "";
@@ -25,20 +25,19 @@ class contact {
         string cominput;
         cout << "Name: " ;
         cin >> cominput;
-        if(cominput != "-") name = cominput;            // susceptible for error
+        if(cominput != "-") name = cominput;
         cout << "Phone: ";
         cin >> cominput;
-        if(cominput != "-") phone = cominput;               // susceptible for error
+        if(cominput != "-") phone = cominput;
         cout << "Email: ";
         cin >> cominput;
-        if(cominput != "-") email = cominput;               // susceptible for error
+        if(cominput != "-") email = cominput;
         cout << "Contact updated" <<'\n'; 
     }
 };
 class ContactList {
     vector<contact> allContacts;
     public:
-    
     void createContact(){
         contact c;
         c.add();
@@ -67,7 +66,6 @@ class ContactList {
     void update(int i){
         if(i == -1) return;
         cout << "enter the new values. Enter '-' to retain old value " << '\n';
-        allContacts[i].display();
         allContacts[i].add();
     }
     void display(){
@@ -95,7 +93,7 @@ void execution(ContactList &cl){
         switch (input) {
         case 1:
             int n;
-            cout << "How many contact you want to make? ";
+            cout << "How many contact you want to add? ";
             cin >> n;
             for(int i = 0; i < n; i++) cl.createContact();
             break;
