@@ -10,30 +10,29 @@ class contact {
     bool fav;
     contact(){
         count++;
-        phone = name = email = "";
+        phone = "";
+        name = "";
+        email = "";
+        fav = 0;
     };
     void display(){
         cout << name << '\n' << phone << '\n' << email <<'\n';
         cout << "-----------------------------------" << '\n';
     }
-    void set(string n, string p, string e){
-        name = n;
-        phone = p;
-        email = e;
-        //check  : whether p has 10 or 12 elements < e has @ sign < name is atleast 2 char long
-    }
-    void add(contact &c){
+
+    //check  : whether p has 10 or 12 elements < e has @ sign < name is atleast 2 char long
+    void add(){
         string cominput;
         cout << "Name: " ;
         cin >> cominput;
-        c.name = cominput == "\n" ? c.name : cominput;              // susceptible for error
+        if(cominput != "-") name = cominput;            // susceptible for error
         cout << "Phone: ";
-        cin >> c.phone;
-        c.phone = cominput == "\n" ? c.phone : cominput;              // susceptible for error
-        cout << "Ëmail: ";
-        cin >> c.email;
-        c.email = cominput == "\n" ? c.email : cominput;              // susceptible for error
-        cout << "Contact created"; 
+        cin >> cominput;
+        if(cominput != "-") phone = cominput;               // susceptible for error
+        cout << "Email: ";
+        cin >> cominput;
+        if(cominput != "-") email = cominput;               // susceptible for error
+        cout << "Contact updated" <<'\n'; 
     }
 };
 class ContactList {
@@ -42,66 +41,89 @@ class ContactList {
     
     void createContact(){
         contact c;
-        c.add(c);
+        c.add();
         allContacts.push_back(c);
     }
-    contact* search(){
+    int search(){
         string param;
         bool found = false;
         cout << "search by name, phone or email" << '\n' << "=> ";
         cin >> param;
-        contact* dummy;
-        for(contact cont: allContacts){
-            cout << "searching contact";
-            if(cont.name == param or cont.email == param or cont.phone == param) {
+        cout << "searching contact  ";
+        for(int i = 0; i < allContacts.size(); i++){
+            cout << "-";
+            if(allContacts[i].name == param or allContacts[i].email == param or allContacts[i].phone == param) {
+                cout << '\n';
                 found = true;
-                dummy = &cont;
-                return dummy;
+                allContacts[i].display();
+                return i;
             }
         }
         if (!found){
-            cout << "No such Contact exist" << '\n';
+            cout << "\n!!No such Contact exist!!" << '\n';
         }
-        return nullptr;
+        return -1;
     }
-    void update(contact* c){
-        cout << "enter the new values. Press Enter to retain old value " << '\n';
-        c->add(*c);
+    void update(int i){
+        if(i == -1) return;
+        cout << "enter the new values. Enter '-' to retain old value " << '\n';
+        allContacts[i].display();
+        allContacts[i].add();
     }
     void display(){
         for(auto c : allContacts){
             c.display();
         }
     }
+    void del(int i){
+        allContacts.erase(allContacts.begin() + i);
+    }
 };
-int contact::count = -1;
-int main() {
-    cout << "Phone book" << '\n';
+int contact::count = 0;
+void execution(ContactList &cl){
     cout << "Functions :" << '\n' <<
      "1. Add Contact" << '\n' << 
      "2. Update a contact" << '\n' <<
      "3. Delete a Contact" << '\n' << 
      "4. Search Contact" << '\n' <<
-     "6. show list "
-     "5. Exit" << '\n';
+     "5. show list" << '\n' <<
+     "6. Exit" << '\n' << "=> ";
     int input;
-    cin >> input;
     
-    ContactList cl;
-    switch (input) {
+        cin >> input;
+        // throw input;
+        switch (input) {
         case 1:
-        int n;
-        cout << "How many contact you want to make? ";
-        cin >> n;
-        for(int i = 0; i < n; i++) cl.createContact();
-        main();
+            int n;
+            cout << "How many contact you want to make? ";
+            cin >> n;
+            for(int i = 0; i < n; i++) cl.createContact();
+            break;
         case 2:
-        cl.update(cl.search());
-        main();
+            cl.update(cl.search());
+            break;
+        case 3:
+            cl.del(cl.search());
+            break;
+        case 4:
+            cl.search();
+            break;
         case 5:
-        return 0;
+            cl.display();
+            break;
         case 6:
-        cl.display();
-    }
+            return;
+        default:
+            cout << "invalid argument";
+        }
+    
+    execution(cl);
+    return;
+}
+int main() {
+    cout << "Phone book" << '\n';
+    ContactList cl;
+    execution(cl);
+    // 3 guatam 5834959324 gautam@ gagan 752894394 gagan@ gothwal 48234925 gothwal@ 2
     return 0;
 }
